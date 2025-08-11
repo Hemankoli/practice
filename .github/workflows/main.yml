@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build project
+      - name: Build project
+        run: npm run build
+
+      # Deploy step
+      - name: Deploy
+        run: |
+          echo "Deploying project..."
+          # Add your deploy script here, e.g.:
+          # scp -r ./build user@server:/path/to/deploy
