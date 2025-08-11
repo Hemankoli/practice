@@ -1,29 +1,32 @@
-name: Deploy
+name: Deploy to Firebase Hosting
 
 on:
   push:
     branches:
-      - deploy
+      - main
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # Step 1: Checkout the code
+      - uses: actions/checkout@v4
 
-      # Install dependencies
-      - name: Install dependencies
-        run: npm install
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      # Build project
-      - name: Build project
-        run: npm run build
+      # Step 3: Check system memory (debugging step)
+      - name: Check System Memory
+        run: free -m
 
-      # Deploy step
-      - name: Deploy
-        run: |
-          echo "Deploying project..."
-          # Add your deploy script here, e.g.:
-          # scp -r ./build user@server:/path/to/deploy
+      # Step 4: Clean npm cache
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      # Step 5: Install dependencies
+      - name: Install Dependencies
+        run: npm ci
+      repoToken: ${{ secrets.TOKEN }}
